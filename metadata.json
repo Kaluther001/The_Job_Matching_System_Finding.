@@ -1,0 +1,5 @@
+{
+  "name": "JobMatch",
+  "description": "A standalone web-based application designed to facilitate online job matching between job seekers and employers.",
+  "requestFramePermissions": []
+}

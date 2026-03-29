@@ -1,0 +1,110 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "A registered user of the Job Matching System.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "The unique identifier of the user." },
+        "email": { "type": "string", "format": "email", "description": "The user's email address." },
+        "role": { "type": "string", "enum": ["job_seeker", "employer", "admin"], "description": "The role of the user." },
+        "name": { "type": "string", "description": "The full name of the user." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "When the user was created." }
+      },
+      "required": ["uid", "email", "role", "name", "createdAt"]
+    },
+    "JobSeekerProfile": {
+      "title": "Job Seeker Profile",
+      "description": "Profile details for a job seeker.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The user ID." },
+        "skills": { "type": "array", "items": { "type": "string" }, "description": "List of skills." },
+        "qualifications": { "type": "array", "items": { "type": "string" }, "description": "List of qualifications." },
+        "location": { "type": "string", "description": "Preferred job location." },
+        "bio": { "type": "string", "description": "A brief biography." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "When the profile was last updated." }
+      },
+      "required": ["userId", "skills", "qualifications", "location", "updatedAt"]
+    },
+    "EmployerProfile": {
+      "title": "Employer Profile",
+      "description": "Profile details for an employer.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The user ID." },
+        "companyName": { "type": "string", "description": "The name of the company." },
+        "location": { "type": "string", "description": "The company location." },
+        "description": { "type": "string", "description": "A brief description of the company." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "When the profile was last updated." }
+      },
+      "required": ["userId", "companyName", "location", "updatedAt"]
+    },
+    "Job": {
+      "title": "Job Announcement",
+      "description": "A job listing created by an employer.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "The job title." },
+        "description": { "type": "string", "description": "The job description." },
+        "employerId": { "type": "string", "description": "The ID of the employer who posted the job." },
+        "employerName": { "type": "string", "description": "The name of the employer." },
+        "location": { "type": "string", "description": "The job location." },
+        "category": { "type": "string", "description": "The job category or industry." },
+        "qualifications": { "type": "array", "items": { "type": "string" }, "description": "Required qualifications." },
+        "status": { "type": "string", "enum": ["open", "closed"], "description": "The status of the job listing." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "When the job was posted." }
+      },
+      "required": ["title", "description", "employerId", "employerName", "location", "category", "qualifications", "status", "createdAt"]
+    },
+    "Chat": {
+      "title": "Chat Conversation",
+      "description": "A conversation between a job seeker and an employer.",
+      "type": "object",
+      "properties": {
+        "participants": { "type": "array", "items": { "type": "string" }, "description": "User IDs of the participants." },
+        "jobId": { "type": "string", "description": "The ID of the job this chat relates to (optional)." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "When the chat was last updated." }
+      },
+      "required": ["participants", "updatedAt"]
+    },
+    "Message": {
+      "title": "Chat Message",
+      "description": "A single message within a chat conversation.",
+      "type": "object",
+      "properties": {
+        "chatId": { "type": "string", "description": "The ID of the chat conversation." },
+        "senderId": { "type": "string", "description": "The ID of the user who sent the message." },
+        "text": { "type": "string", "description": "The message content." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "When the message was sent." }
+      },
+      "required": ["chatId", "senderId", "text", "createdAt"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "Stores user accounts and their roles."
+    },
+    "jobSeekerProfiles/{userId}": {
+      "schema": { "$ref": "#/entities/JobSeekerProfile" },
+      "description": "Stores detailed profiles for job seekers."
+    },
+    "employerProfiles/{userId}": {
+      "schema": { "$ref": "#/entities/EmployerProfile" },
+      "description": "Stores detailed profiles for employers."
+    },
+    "jobs/{jobId}": {
+      "schema": { "$ref": "#/entities/Job" },
+      "description": "Stores job announcements."
+    },
+    "chats/{chatId}": {
+      "schema": { "$ref": "#/entities/Chat" },
+      "description": "Stores chat conversations."
+    },
+    "chats/{chatId}/messages/{messageId}": {
+      "schema": { "$ref": "#/entities/Message" },
+      "description": "Stores messages within a chat conversation."
+    }
+  }
+}
